@@ -53,8 +53,7 @@ Therefore the complete default logback configuration is the following one
 		<connectionRequestTimeout>5</connectionRequestTimeout>
 		<socketTimeout>5</socketTimeout>
 		<Layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
 		</Layout>
 	</appender>
 
