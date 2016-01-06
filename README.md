@@ -16,8 +16,7 @@ A sample configuration is shown below
 		<botToken>123456789123456789123456789123456789123456789</botToken>
 		<chatId>123456789</chatId>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
 		</layout>
 	</appender>
 
@@ -31,7 +30,7 @@ A sample configuration is shown below
 
 The `botToken` and `chatId` must be replaced with real values, **do not use the above values**.
 
-The appender is intented to be used sparingly, just for critical errors because of the inherently low speed of http connection needed to send telegrams.
+The appender is intended to be used sparingly, just for critical errors because of the inherently low speed of http connection needed to send telegrams.
 
 Additional optional properties are
 
