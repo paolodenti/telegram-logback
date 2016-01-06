@@ -74,7 +74,7 @@ Therefore the complete default logback configuration is the following one
 <dependency>
     <groupId>com.github.paolodenti</groupId>
     <artifactId>telegram-logback</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 
 ```
@@ -91,7 +91,7 @@ It can be used behind `slf4j` just adding the `slf4j-api` dependency.
 <dependency>
 	<groupId>com.github.paolodenti</groupId>
 	<artifactId>telegram-logback</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 </dependency>
 
 ```
