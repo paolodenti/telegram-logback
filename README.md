@@ -79,23 +79,6 @@ Therefore the complete default logback configuration is the following one
 
 ```
 
-It can be used behind `slf4j` just adding the `slf4j-api` dependency.
-
-```
-<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-api</artifactId>
-	<version>1.7.13</version>
-</dependency>
-
-<dependency>
-	<groupId>com.github.paolodenti</groupId>
-	<artifactId>telegram-logback</artifactId>
-	<version>1.1</version>
-</dependency>
-
-```
-
 ## How get botToken and chatId ##
 In case you do know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
 
