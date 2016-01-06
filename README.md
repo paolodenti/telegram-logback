@@ -73,7 +73,7 @@ Therefore the complete default logback configuration is the following one
 <dependency>
     <groupId>com.github.paolodenti</groupId>
     <artifactId>telegram-logback</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
 </dependency>
 
 ```

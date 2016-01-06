@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.paolodenti</groupId>
 	<artifactId>telegram-logback</artifactId>
-	<version>1.1</version>
+	<version>1.1.1</version>
 	<name>telegram-logback</name>
 	<description>Telegram Appender for Logback</description>
 	<url>https://github.com/paolodenti/telegram-logback/</url>
