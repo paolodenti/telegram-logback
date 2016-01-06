@@ -15,9 +15,9 @@ A sample configuration is shown below
 		class="com.github.paolodenti.telegram.logback.TelegramAppender">
 		<botToken>123456789123456789123456789123456789123456789</botToken>
 		<chatId>123456789</chatId>
-		<layout class="ch.qos.logback.classic.PatternLayout">
+		<Layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</layout>
+		</Layout>
 	</appender>
 
 	<logger name="com.github.paolodenti.telegram.logback" level="ERROR" />
@@ -52,10 +52,10 @@ Therefore the complete default logback configuration is the following one
 		<connectTimeout>5</connectTimeout>
 		<connectionRequestTimeout>5</connectionRequestTimeout>
 		<socketTimeout>5</socketTimeout>
-		<layout class="ch.qos.logback.classic.PatternLayout">
+		<Layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 			</Pattern>
-		</layout>
+		</Layout>
 	</appender>
 
 	<logger name="com.github.paolodenti.telegram.logback" level="ERROR" />

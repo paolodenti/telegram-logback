@@ -83,23 +83,11 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		this.chatId = chatId;
 	}
 
-	private long lastTimeSentTelegram = 0;
-
-	private RequestConfig requestConfig;
-
 	public void setMinInterval(String minInterval) {
 		try {
 			this.minInterval = Integer.parseInt(minInterval);
 		} catch (NumberFormatException e) {
 			addStatus(new ErrorStatus("Bad minInterval for the appender named \"" + name + "\". Leaving to defaultValue ", this));
-		}
-	}
-
-	public void setSocketTimeout(String socketTimeout) {
-		try {
-			this.socketTimeout = Integer.parseInt(socketTimeout);
-		} catch (NumberFormatException e) {
-			addStatus(new ErrorStatus("Bad socketTimeout for the appender named \"" + name + "\". Leaving to defaultValue ", this));
 		}
 	}
 
@@ -119,6 +107,18 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		}
 	}
 
+	public void setSocketTimeout(String socketTimeout) {
+		try {
+			this.socketTimeout = Integer.parseInt(socketTimeout);
+		} catch (NumberFormatException e) {
+			addStatus(new ErrorStatus("Bad socketTimeout for the appender named \"" + name + "\". Leaving to defaultValue ", this));
+		}
+	}
+
+	private long lastTimeSentTelegram = 0;
+
+	private RequestConfig requestConfig;
+
 	@Override
 	public void start() {
 		int errors = 0;
@@ -135,6 +135,21 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 		if (this.minInterval < 0) {
 			addStatus(new ErrorStatus("Bad minInterval for the appender named \"" + name + "\".", this));
+			errors++;
+		}
+
+		if (this.connectTimeout < 0) {
+			addStatus(new ErrorStatus("Bad connectTimeout for the appender named \"" + name + "\".", this));
+			errors++;
+		}
+
+		if (this.connectionRequestTimeout < 0) {
+			addStatus(new ErrorStatus("Bad connectionRequestTimeout for the appender named \"" + name + "\".", this));
+			errors++;
+		}
+
+		if (this.socketTimeout < 0) {
+			addStatus(new ErrorStatus("Bad socketTimeout for the appender named \"" + name + "\".", this));
 			errors++;
 		}
 
