@@ -1,7 +1,7 @@
 # A Telegram Appender for Logback #
 
 ## Introduction ##
-Instead of applying complicated monitoring system to your appserver log file or using log4j SMTPAppender relying on *if and when* you will read your email, you can get immediate alerts on a Telegram chat (with your bot) for critical errors by using a Telegram Appender.
+Instead of applying complicated monitoring system to your appserver log file or using SMTPAppender relying on *if and when* you will read your email, you can get immediate alerts on a Telegram chat (with your bot) for critical errors by using a Telegram Appender.
 
 ## Logback configuration ##
 A sample configuration is shown below
