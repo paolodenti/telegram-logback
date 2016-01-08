@@ -78,7 +78,7 @@ Therefore the complete default logback configuration is the following one
 ```
 
 ## Project page and Javadocs ##
-You can browse the project page and javadocs here: [javadocs](http://paolodenti.github.io/telegram-logback)
+You can browse the project page and javadocs here: [telegram-logback](http://paolodenti.github.io/telegram-logback)
 
 ## How get botToken and chatId ##
 In case you do know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
