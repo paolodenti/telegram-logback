@@ -39,7 +39,7 @@ Additional optional properties are
 * `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
 * `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
 
-Therefore the complete default logback configuration is the following one
+Therefore a complete example of logback configuration with all the optional properties is the following one
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
