@@ -34,7 +34,7 @@ The appender is intended to be used sparingly, just for critical errors because 
 
 Additional optional properties are
 
-* `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed the telegram is not sent. Default value is 5000.
+* `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
 * `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
 * `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
 * `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
@@ -81,7 +81,7 @@ Therefore the complete default logback configuration is the following one
 You can browse the project page and javadocs here: [telegram-logback](http://paolodenti.github.io/telegram-logback)
 
 ## How get botToken and chatId ##
-In case you do know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
+In case you do not know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
 
 As described in the Telegram Bot API, this is the manual procedure needed in order to get the necessary information.
 
