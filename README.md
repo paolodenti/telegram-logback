@@ -66,8 +66,8 @@ Therefore a complete example of logback configuration with all the optional prop
 ```
 
 ## A real usage scenario ##
-Telegram appender should not be your only appender. You will log as you normally do; telegram is to be used for critical errors.
-THsi is an exanmple of logback configuration with multiple appenders, filtering telegram appender only on error level.
+Telegram appender should not be your only appender; telegram is to be used for critical errors.
+This is an example of logback configuration with multiple appenders, using telegram appender only on error level.
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
