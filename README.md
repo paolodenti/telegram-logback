@@ -90,7 +90,7 @@ This is an example of logback configuration with multiple appenders, using teleg
 		</filter>
 	</appender>
 
-	<logger name="com.github.paolodenti.paolodentibot" level="DEBUG" />
+	<logger name="com.github.paolodenti.telegram.logback" level="DEBUG" />
 
 	<root level="info">
 		<appender-ref ref="STDOUT" />
