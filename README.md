@@ -65,6 +65,40 @@ Therefore a complete example of logback configuration with all the optional prop
 </configuration>
 ```
 
+## A real usage scenario ##
+Telegram appender should not be your only appender. You will log as you normally do; telegram is to be used for critical errors.
+THsi is an exanmple of logback configuration with multiple appenders, filtering telegram appender only on error level.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="TELEGRAM"
+		class="com.github.paolodenti.telegram.logback.TelegramAppender">
+		<botToken>123456789123456789123456789123456789123456789</botToken>
+		<chatId>123456789</chatId>
+		<Layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
+		</Layout>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+		    <level>ERROR</level>
+		</filter>
+	</appender>
+
+	<logger name="com.github.paolodenti.paolodentibot" level="DEBUG" />
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="TELEGRAM" />
+	</root>
+</configuration>
+```
+
 ## Maven usage ##
 `telegram-logback` is available on maven public repository. You just need to add the maven dependency
 
