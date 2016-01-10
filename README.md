@@ -4,42 +4,7 @@
 Instead of applying complicated monitoring system to your appserver log file or using SMTPAppender relying on *if and when* you will read your email, you can get immediate alerts on a Telegram chat (with your bot) for critical errors by using a Telegram Appender.
 
 ## Logback configuration ##
-A sample configuration is shown below
-
-`logback.xml`
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-	<appender name="TELEGRAM"
-		class="com.github.paolodenti.telegram.logback.TelegramAppender">
-		<botToken>123456789123456789123456789123456789123456789</botToken>
-		<chatId>123456789</chatId>
-		<Layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</Layout>
-	</appender>
-
-	<logger name="com.github.paolodenti.telegram.logback" level="ERROR" />
-
-	<root level="info">
-		<appender-ref ref="TELEGRAM" />
-	</root>
-</configuration>
-```
-
-The `botToken` and `chatId` must be replaced with real values, **do not use the above values**.
-
-The appender is intended to be used sparingly, just for critical errors because of the inherently low speed of http connection needed to send telegrams.
-
-Additional optional properties are
-
-* `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
-* `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
-* `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
-* `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
-
-Therefore a complete example of logback configuration with all the optional properties is the following one
+A sample configuration `logback.xml` is shown below
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -57,13 +22,22 @@ Therefore a complete example of logback configuration with all the optional prop
 		</Layout>
 	</appender>
 
-	<logger name="com.github.paolodenti.telegram.logback" level="ERROR" />
-
-	<root level="info">
+	<root level="error">
 		<appender-ref ref="TELEGRAM" />
 	</root>
 </configuration>
 ```
+
+The `botToken` and `chatId` must be replaced with real values, **do not use the above values**.
+
+The appender is intended to be used sparingly, just for critical errors because of the inherently low speed of http connection needed to send telegrams.
+
+The following properties are optional properties:
+
+* `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
+* `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
+* `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
+* `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
 
 ## A real usage scenario ##
 Telegram appender should not be your only appender; telegram is to be used for critical errors.
