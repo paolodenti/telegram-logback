@@ -32,7 +32,7 @@ The `botToken` and `chatId` must be replaced with real values, **do not use the 
 
 The appender is intended to be used sparingly, just for critical errors because of the inherently low speed of http connection needed to send telegrams.
 
-The following properties are optional properties:
+The following are optional properties:
 
 * `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
 * `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
