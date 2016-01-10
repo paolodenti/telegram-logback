@@ -11,12 +11,8 @@ A sample configuration `logback.xml` is shown below
 <configuration>
 	<appender name="TELEGRAM"
 		class="com.github.paolodenti.telegram.logback.TelegramAppender">
-		<botToken><your botToken></botToken>
-		<chatId><your chatId></chatId>
-		<minInterval>5000</minInterval>
-		<connectTimeout>5</connectTimeout>
-		<connectionRequestTimeout>5</connectionRequestTimeout>
-		<socketTimeout>5</socketTimeout>
+		<botToken>123456789123456789123456789123456789123456789</botToken>
+		<chatId>123456789</chatId>
 		<Layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
 		</Layout>
@@ -34,7 +30,7 @@ The appender is intended to be used sparingly, just for critical errors because 
 
 The following are optional properties:
 
-* `minInterval`: threshold in milliseconds for message sending. If `minIntervals` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
+* `minInterval`: threshold in milliseconds for message sending. If `minInterval` msecs are not passed from the last sent telegram, the new telegram is just discarded. Default value is 5000.
 * `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
 * `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
 * `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
