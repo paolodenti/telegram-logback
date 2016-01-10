@@ -76,7 +76,7 @@ This is an example of logback configuration with multiple appenders, using teleg
 <dependency>
     <groupId>com.github.paolodenti</groupId>
     <artifactId>telegram-logback</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 
 ```

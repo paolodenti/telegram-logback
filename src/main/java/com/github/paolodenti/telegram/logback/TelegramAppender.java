@@ -123,6 +123,11 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 	public void start() {
 		int errors = 0;
 
+		if (this.layout == null) {
+			addStatus(new ErrorStatus("No layout set for the appender named \"" + name + "\".", this));
+			errors++;
+		}
+
 		if (this.botToken == null) {
 			addStatus(new ErrorStatus("No botToken set for the appender named \"" + name + "\".", this));
 			errors++;
