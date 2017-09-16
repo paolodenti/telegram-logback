@@ -95,4 +95,4 @@ As described in the Telegram Bot API, this is the manual procedure needed in ord
 2. Create the destination chat and get the `chatId`
 	* Open a new chat with your new Bot and post a message on the chat
 	* Open a browser and invoke `https://api.telegram.org/bot<botToken>/getUpdates` (where `<botToken>` is the `botToken` previously obtained)
-	* Look at the JSON result and write down the value of `result[0].message.chat.id`. That is the chatId.
+	* Look at the JSON result and write down the value of `result[0].message.chat.id`. That is the chatId. Note that if the chat is a group, the chat id is negative. If it is a single person, then positive.
