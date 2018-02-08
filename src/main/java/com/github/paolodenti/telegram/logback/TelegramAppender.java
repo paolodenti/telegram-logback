@@ -1,19 +1,8 @@
 package com.github.paolodenti.telegram.logback;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
@@ -28,8 +17,6 @@ import ch.qos.logback.core.status.ErrorStatus;
  *
  */
 public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
-
-	private static final String TELEGRAM_SEND_MESSAGE_URL = "https://api.telegram.org/bot%s/sendMessage";
 
 	/**
 	 * All synchronization in this class is done via the lock object.
@@ -71,6 +58,21 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 	 */
 	private int socketTimeout = 5;
 
+	/**
+	 * max telegram message size
+	 */
+	private int maxMessageSize = 1024;
+
+	/**
+	 * split in chunks or truncate
+	 */
+	private boolean splitMessage = true;
+
+	/**
+	 * send each telegram in separate thread
+	 */
+	private boolean nonBlocking = true;
+
 	public void setLayout(Layout<E> layout) {
 		this.layout = layout;
 	}
@@ -87,7 +89,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		try {
 			this.minInterval = Integer.parseInt(minInterval);
 		} catch (NumberFormatException e) {
-			addStatus(new ErrorStatus("Bad minInterval for the appender named \"" + name + "\". Leaving to defaultValue ", this));
+			internalAddStatus("Bad minInterval");
 		}
 	}
 
@@ -95,7 +97,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		try {
 			this.connectTimeout = Integer.parseInt(connectTimeout);
 		} catch (NumberFormatException e) {
-			addStatus(new ErrorStatus("Bad connectTimeout for the appender named \"" + name + "\". Leaving to defaultValue ", this));
+			internalAddStatus("Bad connectTimeout");
 		}
 	}
 
@@ -103,7 +105,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		try {
 			this.connectionRequestTimeout = Integer.parseInt(connectionRequestTimeout);
 		} catch (NumberFormatException e) {
-			addStatus(new ErrorStatus("Bad connectionRequestTimeout for the appender named \"" + name + "\". Leaving to defaultValue ", this));
+			internalAddStatus("Bad connectionRequestTimeout");
 		}
 	}
 
@@ -111,8 +113,24 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		try {
 			this.socketTimeout = Integer.parseInt(socketTimeout);
 		} catch (NumberFormatException e) {
-			addStatus(new ErrorStatus("Bad socketTimeout for the appender named \"" + name + "\". Leaving to defaultValue ", this));
+			internalAddStatus("Bad socketTimeout");
 		}
+	}
+
+	public void setMaxMessageSize(String maxMessageSize) {
+		try {
+			this.maxMessageSize = Integer.parseInt(maxMessageSize);
+		} catch (NumberFormatException e) {
+			internalAddStatus("Bad maxMessageSize");
+		}
+	}
+
+	public void setSplitMessage(String splitMessage) {
+		this.splitMessage = Boolean.parseBoolean(splitMessage);
+	}
+
+	public void setNonBlocking(String nonBlocking) {
+		this.nonBlocking = Boolean.parseBoolean(nonBlocking);
 	}
 
 	private long lastTimeSentTelegram = 0;
@@ -124,37 +142,42 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		int errors = 0;
 
 		if (this.layout == null) {
-			addStatus(new ErrorStatus("No layout set for the appender named \"" + name + "\".", this));
+			internalAddStatus("No layout set");
 			errors++;
 		}
 
 		if (this.botToken == null) {
-			addStatus(new ErrorStatus("No botToken set for the appender named \"" + name + "\".", this));
+			internalAddStatus("No botToken set");
 			errors++;
 		}
 
 		if (this.chatId == null) {
-			addStatus(new ErrorStatus("No chatId set for the appender named \"" + name + "\".", this));
+			internalAddStatus("No chatId set");
 			errors++;
 		}
 
 		if (this.minInterval < 0) {
-			addStatus(new ErrorStatus("Bad minInterval for the appender named \"" + name + "\".", this));
+			internalAddStatus("Bad minInterval");
 			errors++;
 		}
 
 		if (this.connectTimeout < 0) {
-			addStatus(new ErrorStatus("Bad connectTimeout for the appender named \"" + name + "\".", this));
+			internalAddStatus("Bad connectTimeout");
 			errors++;
 		}
 
 		if (this.connectionRequestTimeout < 0) {
-			addStatus(new ErrorStatus("Bad connectionRequestTimeout for the appender named \"" + name + "\".", this));
+			internalAddStatus("Bad connectionRequestTimeout");
 			errors++;
 		}
 
 		if (this.socketTimeout < 0) {
-			addStatus(new ErrorStatus("Bad socketTimeout for the appender named \"" + name + "\".", this));
+			internalAddStatus("Bad socketTimeout");
+			errors++;
+		}
+
+		if (this.maxMessageSize <= 0) {
+			internalAddStatus("Bad maxMessageSize");
 			errors++;
 		}
 
@@ -181,41 +204,21 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 			long now = System.currentTimeMillis();
 			if (lastTimeSentTelegram == 0 || (lastTimeSentTelegram + minInterval < now)) {
-
-				CloseableHttpClient httpclient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
-				try {
-					String telegramSendMessageUrl = String.format(TELEGRAM_SEND_MESSAGE_URL, botToken);
-					HttpPost httpPost = new HttpPost(telegramSendMessageUrl);
-					httpPost.setConfig(requestConfig);
-					List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-					nvps.add(new BasicNameValuePair("chat_id", chatId));
-					nvps.add(new BasicNameValuePair("text", messageToSend));
-
-					try {
-						httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
-						CloseableHttpResponse response = httpclient.execute(httpPost);
-						try {
-							if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-								System.err.println("Appender [" + name + "] failed to send telegram with http code " + response.getStatusLine().getStatusCode());
-							}
-						} finally {
-							response.close();
-						}
-					} catch (IOException e) {
-						System.err.println("Appender [" + name + "] failed to send telegram: " + e.getMessage());
-					}
-				} finally {
-					try {
-						httpclient.close();
-					} catch (IOException e) {
-					}
+				if (nonBlocking) {
+					new Thread(new TelegramRunnable(requestConfig, botToken, chatId, messageToSend, maxMessageSize, splitMessage)).start();
+				} else {
+					TelegramUtils.sendTelegramMessages(requestConfig, botToken, chatId, messageToSend, maxMessageSize, splitMessage);
 				}
-
 				lastTimeSentTelegram = now;
 			}
-
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	private static final String MSG_FORMAT = "%s for the appender named '%s'.";
+
+	private void internalAddStatus(String msgPrefix) {
+		addStatus(new ErrorStatus(String.format(MSG_FORMAT, msgPrefix, name), this));
 	}
 }

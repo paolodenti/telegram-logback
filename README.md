@@ -34,6 +34,9 @@ The following are optional properties:
 * `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
 * `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
 * `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
+* `maxMessageSize`: message is split in telegrams of `maxMessageSize` size. If the message is too big, Telegram does not send it. Current max accepted size by Telegram is 4096 but it could change in the future. Default is 1024.
+* `splitMessage`: If true, all chunks of size `maxMessageSize` are sent. If false, only first chunk is sent. Default is true.
+* `nonBlocking`: If true, each telegram is sent in a separate thread. Otherwise the send operation is blocking. Default is true.
 
 ## A real usage scenario ##
 Telegram appender should not be your only appender; telegram is to be used for critical errors.
@@ -69,20 +72,44 @@ This is an example of logback configuration with multiple appenders, using teleg
 </configuration>
 ```
 
-## Maven usage ##
+## Example usage ##
 `telegram-logback` is available on maven public repository. You just need to add the maven dependency
 
-```
-<dependency>
-    <groupId>com.github.paolodenti</groupId>
-    <artifactId>telegram-logback</artifactId>
-    <version>1.1.2</version>
-</dependency>
+pom.xml
 
 ```
+...
+	<dependencies>
+		<dependency>
+			<groupId>com.github.paolodenti</groupId>
+			<artifactId>telegram-logback</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 
-## Project page and Javadocs ##
-You can browse the project page and javadocs here: [telegram-logback](http://paolodenti.github.io/telegram-logback)
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+	</dependencies>
+...
+```
+
+App.java
+
+```
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class App {
+	private static Logger logger = LoggerFactory.getLogger("telegram_test.com.github.paolodenti.telegram.test.AppTest");
+
+	public static void main(String[] args) {
+		logger.error("Telegram rulez!");
+	}
+}
+
+```
 
 ## How get botToken and chatId ##
 In case you do not know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
