@@ -102,7 +102,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class App {
-	private static Logger logger = LoggerFactory.getLogger("telegram_test.com.github.paolodenti.telegram.test.AppTest");
+	private static Logger logger = LoggerFactory.getLogger("App");
 
 	public static void main(String[] args) {
 		logger.error("Telegram rulez!");
