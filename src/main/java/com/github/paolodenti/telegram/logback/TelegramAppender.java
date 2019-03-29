@@ -2,6 +2,8 @@ package com.github.paolodenti.telegram.logback;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+import ch.qos.logback.core.status.InfoStatus;
+import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 
 import ch.qos.logback.core.Layout;
@@ -73,6 +75,17 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 	 */
 	private boolean nonBlocking = true;
 
+	/**
+	 * optional http proxy host
+	 */
+	private String proxyHost = null;
+
+	/**
+	 * optional http proxy port
+	 */
+	private int proxyPort = 0;
+
+
 	public void setLayout(Layout<E> layout) {
 		this.layout = layout;
 	}
@@ -133,6 +146,10 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		this.nonBlocking = Boolean.parseBoolean(nonBlocking);
 	}
 
+	public void setProxyHost(String proxyHost) { this.proxyHost = proxyHost; }
+
+	public void setProxyPort(String proxyPort) { this.proxyPort = Integer.parseInt(proxyPort); }
+
 	private long lastTimeSentTelegram = 0;
 
 	private RequestConfig requestConfig;
@@ -182,7 +199,18 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 		}
 
 		if (errors == 0) {
-			requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout * 1000).setConnectionRequestTimeout(connectionRequestTimeout * 1000).setSocketTimeout(socketTimeout * 1000).build();
+			RequestConfig.Builder reqConfBuilder = RequestConfig.custom()
+					.setConnectTimeout(connectTimeout * 1000)
+					.setConnectionRequestTimeout(connectionRequestTimeout * 1000)
+					.setSocketTimeout(socketTimeout * 1000);
+
+			if (proxyHost != null && proxyPort > 0) {
+				reqConfBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
+				addStatus(new InfoStatus(String.format(MSG_FORMAT, "proxyHost = " + proxyHost, name), this));
+				addStatus(new InfoStatus(String.format(MSG_FORMAT, "proxyPort = " + String.valueOf(proxyPort), name), this));
+			}
+
+			requestConfig = reqConfBuilder.build();
 
 			super.start();
 		}

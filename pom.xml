@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.paolodenti</groupId>
 	<artifactId>telegram-logback</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<name>telegram-logback</name>
 	<description>Telegram Appender for Logback</description>
 	<url>https://github.com/paolodenti/telegram-logback/</url>
@@ -35,7 +35,7 @@
 		<maven-source-plugin.version>2.4</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-		<nexus-staging-maven-plugin.version>1.6.5</nexus-staging-maven-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
 
 		<jdk.version>1.7</jdk.version>
