@@ -113,6 +113,9 @@ public class App {
 
 ```
 
+## Changelog ##
+v. 2.1: Added http proxy server support
+
 ## How get botToken and chatId ##
 In case you do not know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.
 
