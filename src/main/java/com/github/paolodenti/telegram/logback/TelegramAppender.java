@@ -41,6 +41,11 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 	private String chatId = null;
 
 	/**
+	 * telegram message parse mode.
+	 */
+	private String messageParseMode = null;
+
+	/**
 	 * The minimum interval allowed between each telegram message
 	 */
 	private int minInterval = 5000;
@@ -96,6 +101,10 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 
 	public void setChatId(String chatId) {
 		this.chatId = chatId;
+	}
+
+	public void setMessageParseMode(String messageParseMode){
+		this.messageParseMode = messageParseMode.toLowerCase();
 	}
 
 	public void setMinInterval(String minInterval) {
@@ -173,6 +182,11 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 			errors++;
 		}
 
+		if (this.messageParseMode != null && !this.messageParseMode.equals("html") && this.messageParseMode.equals("markdown")) {
+			internalAddStatus("Bad messageParseMode");
+			errors++;
+		}
+
 		if (this.minInterval < 0) {
 			internalAddStatus("Bad minInterval");
 			errors++;
@@ -233,9 +247,9 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 			long now = System.currentTimeMillis();
 			if (lastTimeSentTelegram == 0 || (lastTimeSentTelegram + minInterval < now)) {
 				if (nonBlocking) {
-					new Thread(new TelegramRunnable(requestConfig, botToken, chatId, messageToSend, maxMessageSize, splitMessage)).start();
+					new Thread(new TelegramRunnable(requestConfig, botToken, chatId, messageToSend, messageParseMode, maxMessageSize, splitMessage)).start();
 				} else {
-					TelegramUtils.sendTelegramMessages(requestConfig, botToken, chatId, messageToSend, maxMessageSize, splitMessage);
+					TelegramUtils.sendTelegramMessages(requestConfig, botToken, chatId, messageToSend, messageParseMode, maxMessageSize, splitMessage);
 				}
 				lastTimeSentTelegram = now;
 			}

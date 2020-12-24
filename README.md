@@ -34,6 +34,7 @@ The following are optional properties:
 * `connectTimeout`: connection timeout to Telegram servers, in seconds. Default value is 5.
 * `connectionRequestTimeout`: connection request timeout to Telegram servers, in seconds. Default value is 5.
 * `socketTimeout`: socketTimeout to Telegram servers, in seconds. Default value is 5.
+* `messageParseMode`: use styled messages. You can use `html` value to style the text with HTML tags or `markdown` value to use Markdown. Disabled by default.
 * `maxMessageSize`: message is split in telegrams of `maxMessageSize` size. If the message is too big, Telegram does not send it. Current max accepted size by Telegram is 4096 but it could change in the future. Default is 1024.
 * `splitMessage`: If true, all chunks of size `maxMessageSize` are sent. If false, only first chunk is sent. Default is true.
 * `nonBlocking`: If true, each telegram is sent in a separate thread. Otherwise the send operation is blocking. Default is true.

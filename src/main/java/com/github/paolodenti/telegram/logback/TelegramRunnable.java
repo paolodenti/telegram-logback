@@ -17,20 +17,22 @@ public class TelegramRunnable implements Runnable {
 	private String botToken;
 	private String chatId;
 	private String messageToSend;
+	private String messageParseMode;
 	private int maxMessageSize;
 	private boolean splitMessage;
 
-	public TelegramRunnable(RequestConfig requestConfig, String botToken, String chatId, String messageToSend, int maxMessageSize, boolean splitMessage) {
+	public TelegramRunnable(RequestConfig requestConfig, String botToken, String chatId, String messageToSend, String messageParseMode, int maxMessageSize, boolean splitMessage) {
 		this.requestConfig = requestConfig;
 		this.botToken = botToken;
 		this.chatId = chatId;
 		this.messageToSend = messageToSend;
+		this.messageParseMode = messageParseMode;
 		this.maxMessageSize = maxMessageSize;
 		this.splitMessage = splitMessage;
 	}
 
 	@Override
 	public void run() {
-		TelegramUtils.sendTelegramMessages(requestConfig, botToken, chatId, messageToSend, maxMessageSize, splitMessage);
+		TelegramUtils.sendTelegramMessages(requestConfig, botToken, chatId, messageToSend, messageParseMode, maxMessageSize, splitMessage);
 	}
 }
