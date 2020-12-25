@@ -47,7 +47,9 @@ public class TelegramUtils {
 			List<NameValuePair> nvps = new ArrayList<>();
 			nvps.add(new BasicNameValuePair("chat_id", chatId));
 			nvps.add(new BasicNameValuePair("text", chunk));
-			if(messageParseMode != null) nvps.add(new BasicNameValuePair("parse_mode", messageParseMode));
+			if(messageParseMode != null) {
+				nvps.add(new BasicNameValuePair("parse_mode", messageParseMode));
+			}
 
 			try {
 				httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));

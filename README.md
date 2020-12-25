@@ -86,7 +86,7 @@ pom.xml
 		<dependency>
 			<groupId>com.github.paolodenti</groupId>
 			<artifactId>telegram-logback</artifactId>
-			<version>1.2.1</version>
+			<version>1.3.0</version>
 		</dependency>
 
 		<dependency>
@@ -115,7 +115,9 @@ public class App {
 ```
 
 ## Changelog ##
-v. 2.1: Added http proxy server support
+v. 1.2: Added http proxy server support
+
+v. 1.3: Added formatting (by RodionKorneev)
 
 ## How get botToken and chatId ##
 In case you do not know how to get your `botToken` and `chatId`, these are simple instruction to follow in order to get the necessary configuration information.

@@ -104,7 +104,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 	}
 
 	public void setMessageParseMode(String messageParseMode){
-		this.messageParseMode = messageParseMode.toLowerCase();
+		this.messageParseMode = messageParseMode != null ? messageParseMode.toLowerCase() : null;
 	}
 
 	public void setMinInterval(String minInterval) {
@@ -182,7 +182,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 			errors++;
 		}
 
-		if (this.messageParseMode != null && !this.messageParseMode.equals("html") && this.messageParseMode.equals("markdown")) {
+		if (this.messageParseMode != null && !this.messageParseMode.equals("html") && !this.messageParseMode.equals("markdown")) {
 			internalAddStatus("Bad messageParseMode");
 			errors++;
 		}
@@ -221,7 +221,7 @@ public class TelegramAppender<E> extends UnsynchronizedAppenderBase<E> {
 			if (proxyHost != null && proxyPort > 0) {
 				reqConfBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
 				addStatus(new InfoStatus(String.format(MSG_FORMAT, "proxyHost = " + proxyHost, name), this));
-				addStatus(new InfoStatus(String.format(MSG_FORMAT, "proxyPort = " + String.valueOf(proxyPort), name), this));
+				addStatus(new InfoStatus(String.format(MSG_FORMAT, "proxyPort = " + proxyPort, name), this));
 			}
 
 			requestConfig = reqConfBuilder.build();
