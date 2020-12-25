@@ -28,17 +28,17 @@ public class TelegramUtils {
 
 	protected static final String TELEGRAM_SEND_MESSAGE_URL = "https://api.telegram.org/bot%s/sendMessage";
 
-	public static void sendTelegramMessages(RequestConfig requestConfig, String botToken, String chatId, String messageToSend, int maxMessageSize, boolean splitMessage) {
+	public static void sendTelegramMessages(RequestConfig requestConfig, String botToken, String chatId, String messageToSend, String messageParseMode, int maxMessageSize, boolean splitMessage) {
 		List<String> chunks = splitInTelegramChunks(messageToSend, maxMessageSize);
 		for (String chunk : chunks) {
-			sendTelegramMessage(requestConfig, botToken, chatId, chunk);
+			sendTelegramMessage(requestConfig, botToken, chatId, chunk, messageParseMode);
 			if (!splitMessage) {
 				break;
 			}
 		}
 	}
 
-	private static void sendTelegramMessage(RequestConfig requestConfig, String botToken, String chatId, String chunk) {
+	private static void sendTelegramMessage(RequestConfig requestConfig, String botToken, String chatId, String chunk, String messageParseMode) {
 		CloseableHttpClient httpclient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 		try {
 			String telegramSendMessageUrl = String.format(TELEGRAM_SEND_MESSAGE_URL, botToken);
@@ -47,6 +47,7 @@ public class TelegramUtils {
 			List<NameValuePair> nvps = new ArrayList<>();
 			nvps.add(new BasicNameValuePair("chat_id", chatId));
 			nvps.add(new BasicNameValuePair("text", chunk));
+			if(messageParseMode != null) nvps.add(new BasicNameValuePair("parse_mode", messageParseMode));
 
 			try {
 				httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
